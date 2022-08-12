@@ -3,17 +3,30 @@ library(shiny)
 library(shinydashboard)
 library(DT)
 library(tidyverse)
+library(openxlsx)
+library(writexl)
+library(stringr)
+library(ggplot2)
 
-
-ui<-dashboardPage(title= "DatApp", skin= "blue",dashboardHeader(title="DatApp"
+ui<-dashboardPage(title= "DatApp", skin= "blue",
+                  dashboardHeader(title="DatApp",
+                                  dropdownMenu(type="messages",
+                                               messageItem(from="Abner",
+                                                           "Hola")
                                                
-                                  
+                                  )
                                   
                   ),
                   dashboardSidebar(
+                   
                     
                     sidebarMenu(id="sidebarID",
-                                menuItem("Cargar documento",fileInput("GetFile", "Cargar Archivo")),
+                                menuItem("Cargar documento",
+                                         fileInput("file", "Csv o Excel", 
+                                                   multiple = TRUE,
+                                                  accept = c(".csv", ".xlsx")),
+                                         downloadButton("downloadData", "Download")),
+                    
                                 menuSubItem("Tableu",tabName = 'chart1'),
                                 menuItem("Contenido",id = "chartsID",
                                          menuSubItem("Blog"),
@@ -25,23 +38,30 @@ ui<-dashboardPage(title= "DatApp", skin= "blue",dashboardHeader(title="DatApp"
                     
                   ),
                   dashboardBody(
-                    DT::dataTableOutput("infile"),plotOutput("fig"),
+                    DT::dataTableOutput("contents"),plotOutput("fig")
                     
-                   
+                  
                   )
 )
 
 server <- function(input, output){
   
-  text1<- reactive({
-    infile <- input$GetFile
-    if(is.null(infile)){
-      return(NULL)
+  text1 <- reactive({
+    
+    req(input$file)
+    
+    ext <- input$file$datapath
+    ext <- str_remove(ext, ".*/0.")
+    
+    if(ext == "xlsx")
+    {
+      datafile <- read.xlsx(input$file$datapath)
+    }else{
+      datafile <- read.csv(input$file$datapath, header = TRUE, sep = ",")
     }
-    datafile<-read.csv(infile$datapath)
-    return(datafile)
   })
-  output$infile <- DT::renderDataTable({
+  
+    output$contents <- DT::renderDataTable({
     DT::datatable(text1())
   })
   
@@ -49,7 +69,12 @@ server <- function(input, output){
     ggplot(data = text1(), aes(primernombre, segundonombre))+
       geom_point()
   )
-
+  output$downloadData <- downloadHandler(
+    filename = "prueba.xlsx",
+    content = function(file) {
+      write_xlsx(text1(), file)
+    }
+  )
   
 }
 shinyApp(ui, server)
