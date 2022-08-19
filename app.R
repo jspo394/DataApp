@@ -18,17 +18,15 @@ ui<-dashboardPage(title= "DatApp", skin= "blue",
                                   
                   ),
                   dashboardSidebar(
-                   
+                    
                     
                     sidebarMenu(id="sidebarID",
-                                menuItem("Cargar documento",
-                                         fileInput("file", "Csv o Excel", 
-                                                   multiple = TRUE,
-                                                  accept = c(".csv", ".xlsx")),
-                                         downloadButton("downloadData", "Download")),
-                    
-                                menuSubItem("Tableu",tabName = 'chart1'),
-                                menuItem("Contenido",id = "chartsID",
+                                menuItem("Cargar documento",icon = icon("upload"),
+                                         fileInput("file", "Csv o Excel", multiple = TRUE,accept = c(".csv", ".xlsx"))),
+                                
+                                menuItem("Descargar",icon = icon("download"),downloadButton("downloadData")),
+                                menuItem("Tableu",icon = icon("dashboard")),
+                                menuItem("Contenido",id = "chartsID",icon = icon("rss"),
                                          menuSubItem("Blog"),
                                          menuSubItem("Quienes somos")
                                          
@@ -40,7 +38,7 @@ ui<-dashboardPage(title= "DatApp", skin= "blue",
                   dashboardBody(
                     DT::dataTableOutput("contents"),plotOutput("fig")
                     
-                  
+                    
                   )
 )
 
@@ -61,7 +59,7 @@ server <- function(input, output){
     }
   })
   
-    output$contents <- DT::renderDataTable({
+  output$contents <- DT::renderDataTable({
     DT::datatable(text1())
   })
   
