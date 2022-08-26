@@ -73,6 +73,6 @@ server <- function(input, output){
       write_xlsx(text1(), file)
     }
   )
-
+  
 }
 shinyApp(ui, server)
