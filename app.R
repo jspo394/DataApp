@@ -17,6 +17,7 @@ ui<-dashboardPage(title= "DatApp", skin= "blue",
                                   )
                                   
                   ),
+                  
                   dashboardSidebar(
                     
                     
@@ -25,7 +26,7 @@ ui<-dashboardPage(title= "DatApp", skin= "blue",
                                          fileInput("file", "Csv o Excel", multiple = TRUE,accept = c(".csv", ".xlsx"))),
                                 
                                 menuItem("Descargar",icon = icon("download"),downloadButton("downloadData")),
-                                menuItem("Tableu",icon = icon("dashboard")),
+                                menuItem("Tableu",icon = icon("dashboard"),href = "https://public.tableau.com/app/profile/javier.mauricio.bedoya.gonzalez/viz/Anlisis_Brecha_Digital_Colombia/Hoja1"),
                                 menuItem("Contenido",id = "chartsID",icon = icon("rss"),
                                          menuSubItem("Blog"),
                                          menuSubItem("Quienes somos")
@@ -64,8 +65,7 @@ server <- function(input, output){
   })
   
   output$fig <- renderPlot(
-    ggplot(data = text1(), aes(primernombre, segundonombre))+
-      geom_point()
+    ggplot(data = text1(), aes(Nombre))+geom_bar()
   )
   output$downloadData <- downloadHandler(
     filename = "prueba.xlsx",
