@@ -25,7 +25,7 @@ ui<-dashboardPage(title= "DatApp",
                                          fileInput("file", "Csv o Excel", multiple = TRUE,accept = c(".csv", ".xlsx"))),
                                 
                                 menuItem("Descargar",icon = icon("download"),downloadButton("downloadData")),
-                                menuItem("Tableu",icon = icon("dashboard"),href = "https://public.tableau.com/app/profile/javier.mauricio.bedoya.gonzalez/viz/Anlisis_Brecha_Digital_Colombia/Hoja1")#,
+                                menuItem("Tableau",icon = icon("dashboard"),href = "https://public.tableau.com/app/profile/javier.mauricio.bedoya.gonzalez/viz/Anlisis_Brecha_Digital_Colombia/Hoja1")#,
                                 # menuItem("Contenido",id = "chartsID",icon = icon("rss"),
                                 #          menuSubItem("Blog"),
                                 #          menuSubItem("Quienes somos")
